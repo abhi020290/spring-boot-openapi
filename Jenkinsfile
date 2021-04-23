@@ -1,7 +1,7 @@
 node {
 	def app
 	def image = 'registry.hub.docker.com/abhi020290/spring-boot-openapi'
-	def branch = '0.0.1-SNAPSHOT'
+	def branch = 'master'
 	
 	try {
 		stage('Clone repository') {               
