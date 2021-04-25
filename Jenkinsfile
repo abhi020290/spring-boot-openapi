@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    stages {
-        
-        stage ('Checkout') {
-        git url: 'https://github.com/abhi020290/spring-boot-openapi.git'
-        }
- 
         
         stage ('Compile Stage') {
             steps {
