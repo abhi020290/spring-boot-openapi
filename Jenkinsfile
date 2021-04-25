@@ -1,29 +1,45 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
-        }
-    }
+    agent any
+
     stages {
-        stage('Build') {
-            steps {
-                sh 'mvn -B -DskipTests clean package'
-            }
+        
+        stage ('Checkout') {
+        git url: 'https://github.com/abhi020290/spring-boot-openapi.git'
         }
-        stage('Test') {
+ 
+        
+        stage ('Compile Stage') {
             steps {
-                sh 'mvn test'
-            }
-            post {
-                always {
-                    junit 'target/surefire-reports/*.xml'
+                withMaven(maven : 'maven_3_6_3') {
+                    sh 'mvn clean compile'
                 }
             }
         }
-        stage('Deliver') {
+        
+            
+        stage ('Build Stage') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                withMaven(maven : 'maven_3_6_3') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
+        stage ('Testing Stage') {
+
+            steps {
+                withMaven(maven : 'maven_3_6_3') {
+                    sh 'mvn test'
+                }
+            }
+        }
+
+
+        stage ('Deployment Stage') {
+            steps {
+                withMaven(maven : 'maven_3_6_3') {
+                    sh 'mvn deploy'
+                }
             }
         }
     }
